@@ -13,13 +13,15 @@ class User_test extends TestCase
 	public function test_user()
 	{
         try {
-			$output = $this->request('GET', 'Welcome/user_data');
+			$output = $this->request('GET', 'api/users/id/1');
 		} catch (CIPHPUnitTestExitException $e) {
 			$output = ob_get_clean();
 		}
 
 		$this->assertEquals(
-			json_encode(['name' => 'mugi']),
+			json_encode(
+				['id' => 1, 'name' => 'Jim', 'email' => 'jim@example.com']
+			),
 			$output
 		);
 		$this->assertResponseCode(200);
