@@ -13,7 +13,7 @@ class User_test extends TestCase
 	public function test_user()
 	{
         try {
-			$output = $this->request('GET', 'api/users/id/1');
+			$output = $this->request('POST', 'api/users/id/1');
 		} catch (CIPHPUnitTestExitException $e) {
 			$output = ob_get_clean();
 		}
