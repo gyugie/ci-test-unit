@@ -1,59 +1,76 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'libraries/REST_Controller.php';
+require APPPATH . 'controllers/Rest.php';
 
-class Api extends REST_Controller {
-
-    function __construct()
-    {
-        // Construct the parent class
-        parent::__construct();
+class Api extends Rest {
+    function __construct($config = 'rest') {
+        parent::__construct($config);
+        $this->load->database();
+        $this->cektoken();
     }
-
-    public function users_get()
-    {
-       
-        // Users from a data store e.g. database
-        $users = [
-            ['id' => 0, 'name' => 'John', 'email' => 'john@example.com'],
-            ['id' => 1, 'name' => 'Jim', 'email' => 'jim@example.com'],
-        ];
-
-       
-
-        $id = $this->get( 'id' );
-
-        if ( $id === null )
-        {
-            // Check if the users data store contains users
-            if ( $users )
-            {
-                // Set the response and exit
-                $this->response( $users, 200 );
+    /* index page */
+    function index_get($table = '', $id = '') {
+        if ($table == '') {
+            redirect(base_url());
+        } else {
+            $get_id = 'id_'.$table;
+            if ($id == '') {
+            // baseurl/?table=nama_table (semua data)
+                $data = $this->db->get($table)->result();
+            } else {
+            // baseurl/?table=nama_table&id=id (satu data)
+                $this->db->where($get_id, $id);
+                $data = $this->db->get($table)->result();
             }
-            else
-            {
-                // Set the response and exit
-                $this->response( [
-                    'status' => false,
-                    'message' => 'No users were found'
-                ], 404 );
-            }
+            $this->response($data, 200);
         }
-        else
-        {
-            if ( array_key_exists( $id, $users ) )
-            {
-                $this->response( $users[$id], 200 );
-            }
-            else
-            {
-                $this->response( [
-                    'status' => false,
-                    'message' => 'No such user found'
-                ], 404 );
-            }
+    }
+    function index_post($table = '') { // baseurl/?table=nama_table
+        $insert = $this->db->insert($table, $this->post());
+        $id = $this->db->insert_id();
+        if ($insert) {
+            $response = array(
+                'data' => $this->post(),
+                'table' => $table,
+                'id' => $id,
+                'status' => 'success'
+                );
+            $this->response($response, 200);
+        } else {
+            $this->response(array('status' => 'fail', 502));
+        }
+    }
+    function index_put($table = '', $id = '') { // baseurl/nama_table/id
+        $get_id = 'id_'.$table;
+        $this->db->where($get_id, $id);
+        $update = $this->db->update($table, $this->put());
+        if ($update) {
+            $response = array(
+                'data' => $this->put(),
+                'table' => $table,
+                'id' => $id,
+                'status' => 'success'
+                );
+            $this->response($response, 200);
+        } else {
+            $this->response(array('status' => 'fail', 502));
+        }
+    }
+    function index_delete($table = '', $id = '') {
+        $get_id = 'id_'.$table;
+        $this->db->where($get_id, $id);
+        $delete = $this->db->delete($table);
+        if ($delete) {
+            $response = array(
+                'table' => $table,
+                'id' => $id,
+                'status' => 'success'
+                );
+            $this->response($response, 201);
+        } else {
+            $this->response(array('status' => 'fail', 502));
         }
     }
 }
+?>
