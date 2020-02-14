@@ -24,11 +24,11 @@ class User_test extends TestCase
 	public function test_user()
 	{
         try {
-			$output = $this->request('POST', 'api/users/id/1');
+			$output = $this->request('GET', 'users');
 		} catch (CIPHPUnitTestExitException $e) {
 			$output = ob_get_clean();
 		}
-
+		print_r($output);exit;
 		$this->assertEquals(
 			json_encode(
 				['id' => 1, 'name' => 'Jim', 'email' => 'jim@example.com']
@@ -40,7 +40,6 @@ class User_test extends TestCase
 	
 	public function test_auth(){
 		$payload 	= $this->faker->faker_user();
-		
 		
 		$output = $this->request('POST', 'auth/login', $payload);
 		$this->assertEquals(
@@ -55,4 +54,6 @@ class User_test extends TestCase
 		);
 		$this->assertResponseCode(200);
 	}
+
+	
 }

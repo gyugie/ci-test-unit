@@ -736,6 +736,7 @@ abstract class REST_Controller extends \CI_Controller {
         // Call the controller method and passed arguments
         try
         {
+         
             call_user_func_array([$this, $controller_method], $arguments);
         }
         catch (CIPHPUnitTestExitException $ex)
@@ -785,6 +786,7 @@ abstract class REST_Controller extends \CI_Controller {
         // If data is not NULL and a HTTP status code provided, then continue
         elseif ($data !== NULL)
         {
+          
             // If the format method exists, call and return the output in that format
             if (method_exists($this->format, 'to_' . $this->response->format))
             {

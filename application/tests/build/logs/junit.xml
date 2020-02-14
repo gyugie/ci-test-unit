@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="CodeIgniter Application Test Suite" tests="1" assertions="2" failures="0" errors="0" time="0.063575">
-    <testsuite name="User_test" file="/var/www/html/ci-test-unit/application/tests/controllers/User_test.php" tests="1" assertions="2" failures="0" errors="0" time="0.063575">
-      <testcase name="test_auth" class="User_test" file="/var/www/html/ci-test-unit/application/tests/controllers/User_test.php" line="41" assertions="2" time="0.063575"/>
-    </testsuite>
-  </testsuite>
-</testsuites>
